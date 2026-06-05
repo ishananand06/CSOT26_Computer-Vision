@@ -36,17 +36,17 @@ Before jumping into training, our structural goals are to master:
 
 ### Step 2: Uncover Why Deep Networks Fail
 
-* **Read this text**: Study the first 4 pages of the seminal [Deep Residual Learning for Image Recognition Paper](https://arxiv.org/pdf/1512.03385).
+* **Read this text**: Study the first 4 pages of the seminal [Deep Residual Learning for Image Recognition Paper](https://arxiv.org/pdf/1512.03385) (https://arxiv.org/pdf/1512.03385).
 * Focus heavily on understanding the core difference between the **vanishing gradient problem** and the **degradation problem**.
 
 ### Step 3: Deconstruct the ResNet Architecture & Batch Norm
 
-* **Read the core chapters**: Thoroughly examine the [Dive into Deep Learning (D2L): ResNet Chapter](https://d2l.ai/chapter_convolutional-modern/resnet.html) and the [D2L: Batch Normalization Chapter](https://d2l.ai/chapter_convolutional-modern/batch-norm.html).
+* **Read the core chapters**: Thoroughly examine the [Dive into Deep Learning (D2L): ResNet Chapter](https://d2l.ai/chapter_convolutional-modern/resnet.html) (https://d2l.ai/chapter_convolutional-modern/resnet.html) and the [D2L: Batch Normalization Chapter](https://d2l.ai/chapter_convolutional-modern/batch-norm.html) (https://d2l.ai/chapter_convolutional-modern/batch-norm.html).
 * Pay close attention to how **skip connections** pass an identity mapping across layers to keep gradients flowing smoothly back through the network. Look at how the **ResNet-18** architecture structures these blocks.
 
 ### Step 4: Explore Data Augmentation Theory
 
-* **Read and visualize**: Walk through the [PyTorch Vision Transforms Guide](https://docs.pytorch.org/vision/stable/auto_examples/transforms/plot_transforms_getting_started.html) or review [Sebastian Raschka's Data Augmentation Guide](https://sebastianraschka.com/blog/2023/data-augmentation-pytorch.html).
+* **Read and visualize**: Walk through the [PyTorch Vision Transforms Guide](https://docs.pytorch.org/vision/stable/auto_examples/transforms/plot_transforms_getting_started.html) (https://docs.pytorch.org/vision/stable/auto_examples/transforms/plot_transforms_getting_started.html) or review [Sebastian Raschka's Data Augmentation Guide](https://sebastianraschka.com/blog/2023/data-augmentation-pytorch.html) (https://sebastianraschka.com/blog/2023/data-augmentation-pytorch.html).
 * Understand how common pixel manipulations, like horizontal flips, random rotations, cropping, color jitter, and normalization, serve as a regularizer to artificially expand your dataset's footprint.
 
 ### Step 5: Load the EuroSAT Dataset
