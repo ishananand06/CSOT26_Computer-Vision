@@ -2,7 +2,7 @@
 
 ## 🧠 Computer Vision Track: Week 2
 
-### 🔍 Deep Networks, ResNet-18 & Data Augmentation 
+### 🔍 Deep Networks, ResNet-18 & Data Augmentation
 
 ---
 
@@ -25,44 +25,47 @@ Before jumping into training, our structural goals are to master:
 
 ---
 
-## 🧂 Step-by-Step Action Plan
+## 🗂️ Step-by-Step Action Plan
 
 ### Step 1: Initialize Your Compute Environment
 
 * **Do this first**: Open your **Google Colab** or local Jupyter workspace and ensure your GPU accelerator is fully active.
 * Verify your baseline vision libraries are ready to roll:
-* `torch` and `torch.nn` (For building custom residual blocks and batch normalization layers) 
-* `torchvision.transforms` (For executing data manipulation pipelines) 
+  * `torch` and `torch.nn` (For building custom residual blocks and batch normalization layers)
+  * `torchvision.transforms` (For executing data manipulation pipelines)
 
-### Step 2: Uncover Why Deep Networks Fail
+### Step 2: Diagnose What Went Wrong in Week 1
+
+* **Read this first**: Before understanding why deeper networks fail, make sure you can clearly see *how* your Week 1 CNN failed. Read [Overfitting vs Underfitting — GeeksforGeeks](https://www.geeksforgeeks.org/machine-learning/underfitting-and-overfitting-in-machine-learning/) (https://www.geeksforgeeks.org/machine-learning/underfitting-and-overfitting-in-machine-learning/) to understand the train vs. val loss gap in plain language.
+* Then evaluate your Week 1 model properly using a confusion matrix and per-class accuracy — [Confusion Matrix in Python — GeeksforGeeks](https://www.geeksforgeeks.org/compute-classification-report-and-confusion-matrix-in-python/) (https://www.geeksforgeeks.org/compute-classification-report-and-confusion-matrix-in-python/) walks through this with code. This tells you *where* your model failed, not just *how much*.
+
+### Step 3: Uncover Why Deep Networks Fail
 
 * **Read this text**: Study the first 4 pages of the seminal [Deep Residual Learning for Image Recognition Paper](https://arxiv.org/pdf/1512.03385) (https://arxiv.org/pdf/1512.03385).
 * Focus heavily on understanding the core difference between the **vanishing gradient problem** and the **degradation problem**.
 
-### Step 3: Deconstruct the ResNet Architecture & Batch Norm
+### Step 4: Deconstruct the ResNet Architecture & Batch Norm
 
-* **Read the core chapters**: Thoroughly examine the [Dive into Deep Learning (D2L): ResNet Chapter](https://d2l.ai/chapter_convolutional-modern/resnet.html) (https://d2l.ai/chapter_convolutional-modern/resnet.html) and the [D2L: Batch Normalization Chapter](https://d2l.ai/chapter_convolutional-modern/batch-norm.html) (https://d2l.ai/chapter_convolutional-modern/batch-norm.html).
+* **Build intuition first**: Before hitting the formal chapter, read [Batch Norm Explained Visually — Towards Data Science](https://towardsdatascience.com/batch-norm-explained-visually-how-it-works-and-why-neural-networks-need-it-b18919692739/) (https://towardsdatascience.com/batch-norm-explained-visually-how-it-works-and-why-neural-networks-need-it-b18919692739/) to understand why normalising activations helps, using visuals and no heavy math.
+* **Then read the core chapters**: Thoroughly examine the [Dive into Deep Learning (D2L): ResNet Chapter](https://d2l.ai/chapter_convolutional-modern/resnet.html) (https://d2l.ai/chapter_convolutional-modern/resnet.html) and the [D2L: Batch Normalization Chapter](https://d2l.ai/chapter_convolutional-modern/batch-norm.html) (https://d2l.ai/chapter_convolutional-modern/batch-norm.html).
 * Pay close attention to how **skip connections** pass an identity mapping across layers to keep gradients flowing smoothly back through the network. Look at how the **ResNet-18** architecture structures these blocks.
 
-### Step 4: Explore Data Augmentation Theory
+### Step 5: Explore Data Augmentation Theory
 
 * **Read and visualize**: Walk through the [PyTorch Vision Transforms Guide](https://docs.pytorch.org/vision/stable/auto_examples/transforms/plot_transforms_getting_started.html) (https://docs.pytorch.org/vision/stable/auto_examples/transforms/plot_transforms_getting_started.html) or review [Sebastian Raschka's Data Augmentation Guide](https://sebastianraschka.com/blog/2023/data-augmentation-pytorch.html) (https://sebastianraschka.com/blog/2023/data-augmentation-pytorch.html).
 * Understand how common pixel manipulations, like horizontal flips, random rotations, cropping, color jitter, and normalization, serve as a regularizer to artificially expand your dataset's footprint.
 
-### Step 5: Load the EuroSAT Dataset
+### Step 6: Load the EuroSAT Dataset & Build Your Pipeline
 
 * **Prepare the pipeline**: We are stepping up our dataset game by working with **EuroSAT** (satellite images used for land cover classification).
-* Create two distinct PyTorch DataLoaders:
-1. A baseline pipeline applying *only* basic tensor conversion and normalization.
-2. An augmented pipeline integrating aggressive spatial and color transforms.
+* If you need a refresher on building CNN pipelines in PyTorch before writing your loaders, the [PyTorch Official CNN Tutorial](https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html) (https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html) is a reliable reference.
+* Create a DataLoader with an augmented pipeline integrating aggressive spatial and color transforms.
 
-### Step 6: Run the Comparative Experiment (Build 1)
+### Step 7: Train & Evaluate (Build 1)
 
-* **Build and train**: Write a training loop using a standard CNN architecture.
-* Train this exact same model configuration on EuroSAT **twice**:
-* Run #1: Train using the baseline loader (No Augmentation).
-* Run #2: Train using the augmented loader.
-* Keep all hyperparameters, optimization settings, and training epochs identical across both runs so the comparison stays scientifically clean.
+* **Build and train**: Write a training loop using a standard CNN architecture on EuroSAT with your augmented DataLoader.
+* Use a **learning rate scheduler** to avoid accuracy plateauing mid-training — refer to the [PyTorch LR Scheduler Docs](https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate) (https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate) for `ReduceLROnPlateau` and `CosineAnnealingLR`.
+* **Save your best checkpoint** rather than just the final epoch — [PyTorch: Saving and Loading Models](https://pytorch.org/tutorials/beginner/saving_loading_models.html) (https://pytorch.org/tutorials/beginner/saving_loading_models.html) covers this directly.
 
 ---
 
@@ -76,14 +79,14 @@ Before jumping into training, our structural goals are to master:
 
 ## ✅ Week 2 Deliverables
 
-* ✅ Completed PyTorch training notebook evaluating both network configurations.
-* ✅ Inference submission of predictions generated exclusively by your **augmented model** on the held-out EuroSAT test set.
+* ✅ Completed PyTorch training notebook with your augmented training pipeline.
+* ✅ Inference submission of predictions generated by your **augmented model** on the held-out EuroSAT test set.
 
 🏆 **Leaderboard Target**: Your success this week is evaluated strictly on your **Augmented Model Test Accuracy** on the EuroSAT evaluation split.
 
 ---
 
-## 🔮 What’s Next (Week 3)
+## 🔮 What's Next (Week 3)
 
 * Moving past training from scratch: Introducing the strategy of **Transfer Learning**.
 * Knowing exactly when to deploy a completely **frozen backbone** network vs. executing a **full model fine-tuning** loop.
