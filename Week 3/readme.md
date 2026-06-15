@@ -63,7 +63,6 @@ Before jumping into the code, our structural goals are to master:
 
 * **Gradient Management**: In PyTorch, setting `parameter.requires_grad = False` is what actively stops the backpropagation engine from spending computation time calculating gradients for your frozen layers.
 * **The Catastrophic Forgetting Trap**: If you run full model fine-tuning with a high learning rate, your gradients will wipe out the model’s pretrained general knowledge, reducing its performance to a baseline model built from scratch. Read [this article](https://www.projectpro.io/article/catastrophic-forgetting/1034) (https://www.projectpro.io/article/catastrophic-forgetting/1034) before Step 4 if this concept is new to you.
-* **Consistency Check**: Keep using the exact same EuroSAT dataset splits and base augmentations from Week 2 to ensure your historical performance comparison is clean and scientific!
 
 ---
 
