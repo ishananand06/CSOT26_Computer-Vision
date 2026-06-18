@@ -71,7 +71,35 @@ Before diving into the pipeline setup, our structural goals are to master:
 
 ## ✅ Week 4 Deliverables
 
-* TBD
+* ✅ Completed notebook containing your full people tracking pipeline.
+* ✅ Tracking output for all 3 test sequences submitted as `01.txt`, `02.txt`, `03.txt`.
+
+🏆 Leaderboard is determined by **(2×IDF1 + HOTA) / 3** across all 3 test sequences.
+
+---
+
+### 📝 Note
+
+**Problem Statement**: Build a people tracking pipeline that assigns persistent identity IDs to every pedestrian across all frames of a video sequence.
+
+**Output Format**: Your submission must follow the given format exactly — one `.txt` file per sequence, each line representing one detection:
+```
+<frame>, <id>, <bb_left>, <bb_top>, <bb_width>, <bb_height>, <conf>, <x>, <y>, <z>
+```
+All frame numbers, target IDs and bounding boxes are **1-based**, not 0-based. 
+`<conf>` is the detector confidance score, in this case how confidant is YOLO that the detected object is a person.
+Set `<conf>` to `-1` for all submitted results.
+
+**Dataset Folder Structure**: Each sequence folder contains:
+```
+01/
+    img/          ← frames as individual .jpg files, named sequentially
+    seqinfo.ini   ← sequence metadata (fps, resolution, frame count)
+```
+
+**Reference Sequence**: A reference folder `ref` is provided. It contains a `gt.txt` ground truth file — use this to verify your output format and test your pipeline before submitting. Your submission `.txt` files should follow the exact same format as `gt.txt`. You can also run your pipeline visually on the test sequences to sanity check your tracking output before submission.
+
+**Coordinate Format**: Your bounding boxes must be in `bb_left, bb_top, bb_width, bb_height` (top-left corner, width, height). YOLOv8 outputs `xyxy` by default — convert before writing to file.
 
 ---
 
