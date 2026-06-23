@@ -79,28 +79,56 @@ Before diving into the pipeline setup, our structural goals are to master:
 ---
 
 ### 📝 Note
-
+ 
 **Problem Statement**: Build a people tracking pipeline that assigns persistent identity IDs to every pedestrian across all frames of a video sequence.
-
+ 
 **Output Format**: Your submission must follow the given format exactly — one `.txt` file per sequence, each line representing one detection:
 ```
-<frame>, <id>, <bb_left>, <bb_top>, <bb_width>, <bb_height>, <conf>, <x>, <y>, <z>
+<frame>, <id>, <bb_left>, <bb_top>, <bb_width>, <bb_height>, <conf>, -1, -1, -1
 ```
-All frame numbers, target IDs and bounding boxes are **1-based**, not 0-based. 
-`<conf>` is the detector confidance score, in this case how confidant is YOLO that the detected object is a person.
-Set `<conf>` to `-1` for all submitted results.
-
+ 
+| Column | Meaning |
+|--------|---------|
+| `frame` | Frame number — **1-based**, not 0-based |
+| `id` | Persistent identity assigned to each tracked person — **1-based** |
+| `bb_left` | Left edge of bounding box in pixels |
+| `bb_top` | Top edge of bounding box in pixels |
+| `bb_width` | Width of bounding box in pixels |
+| `bb_height` | Height of bounding box in pixels |
+| `conf` | Set to `-1` for all submitted results |
+| `-1, -1, -1` | World coordinates (x, y, z) — unused in 2D tracking, always `-1` |
+ 
+> **Why are the last three always -1?** The submission format is shared across both 2D and 3D benchmarks. In 3D benchmarks with stereo cameras or LiDAR, real-world x, y, z coordinates in metres are provided. For 2D video like this week's sequences, you only have pixel coordinates — there is no way to compute depth from a single RGB camera. The evaluator ignores these columns entirely for 2D benchmarks.
+ 
 **Dataset Folder Structure**: Each sequence folder contains:
 ```
 01/
     img/          ← frames as individual .jpg files, named sequentially
     seqinfo.ini   ← sequence metadata (fps, resolution, frame count)
 ```
-
-**Reference Sequence**: A reference folder `ref` is provided. It contains a `gt.txt` ground truth file — use this to verify your output format and test your pipeline before submitting. Your submission `.txt` files should follow the exact same format as `gt.txt`. You can also run your pipeline visually on the test sequences to sanity check your tracking output before submission.
-
+ 
+**Reference Sequence**: A reference folder `ref` is provided. It contains a `gt.txt` ground truth file — use this to verify your output format and test your pipeline before submitting.
+ 
+> **Important — gt.txt and your submission have different column structures:**
+>
+> `gt.txt` has **9 columns**:
+> ```
+> frame, id, bb_left, bb_top, bb_width, bb_height, conf, class, visibility
+> ```
+> - `conf` — 1 = evaluate this annotation, 0 = ignore it
+> - `class` — always 1 (pedestrian)
+> - `visibility` — fraction of the person's body that is visible (0–1), used internally by the evaluator
+>
+> Your submission has **10 columns** where the last three are always `-1`. The first 6 columns are identical and are what the evaluator actually compares.
+>
+> **Do not try to match gt.txt column for column** — the formats are intentionally different.
+ 
+**How to use gt.txt for self-evaluation:** Run your pipeline on the `ref` sequence and generate a `ref.txt`. Open `gt.txt` and your `ref.txt` side by side. Pick one person (one gt id) and check whether that same person keeps the same id in your output across frames. If your ID for the same person keeps changing while gt stays stable — your tracker is losing tracks and swapping identities. Fix this before submitting the test sequences.
+ 
+**How your submission is evaluated:** For each frame, your predicted boxes are matched to ground truth boxes using IoU > 0.5. A match is a correct detection. If the same ground truth person gets a different predicted ID compared to the previous frame — that is an identity switch, which is what the leaderboard metric penalises most heavily. The score rewards both finding people (detection) and keeping the same ID on the same person across all frames (association).
+ 
 **Coordinate Format**: Your bounding boxes must be in `bb_left, bb_top, bb_width, bb_height` (top-left corner, width, height). YOLOv8 outputs `xyxy` by default — convert before writing to file.
-
+ 
 ---
 
 ## 🔮 What's Next (Week 5)
